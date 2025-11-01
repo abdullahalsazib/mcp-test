@@ -8,3 +8,17 @@ mcp = FastMCP(name="abdullah", stateless_http=True)
 def addNumber(a: int, b: int) -> dict:
     """Add two numbers"""
     return {"result": a + b}
+@mcp.tool()
+def addSub(a: int, b: int) -> dict:
+    """Subtract two numbers"""
+    return {"result": a - b}
+@mcp.tool()
+def addMul(a: int, b: int) -> dict:
+    """Multiply two numbers"""
+    return {"result": a * b}
+@mcp.tool()
+def addDiv(a: int, b: int) -> dict:
+    """Divide two numbers"""
+    return {"result": a / b}
+
+
