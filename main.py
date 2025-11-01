@@ -1,7 +1,7 @@
 from mcp.server.fastmcp import FastMCP
 
 # Initialize MCP server
-mcp = FastMCP("abdullah 🚀")
+mcp = FastMCP("abdullah", host="0.0.0.0", port=8000)
 
 # Define a simple tool
 @mcp.tool()
@@ -12,4 +12,4 @@ def addNumber(a: int, b: int) -> dict:
 # Run the MCP server when executed
 if __name__ == "__main__":
     # Run with HTTP transport (works in FastMCP Cloud)
-    mcp.run("http", port=8000)
+    mcp.run("streamable-http")
