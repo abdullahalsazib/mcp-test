@@ -1,6 +1,6 @@
 import contextlib
 from fastapi import FastAPI
-from mani import mcp as math_mcp
+from main import mcp as math_mcp
 import os
 
 
