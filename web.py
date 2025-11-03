@@ -1,10 +1,10 @@
 from typing import Any, Dict, List, Optional
+import os
 import httpx
 from mcp.server.fastmcp import FastMCP
 
-# NOTE: Per user request, the API key is hardcoded here.
-# Replace the placeholder with your actual Firecrawl API key.
-FIRECRAWL_API_KEY = "fc-fc120f59eac54901a7af82b2daf8e821"
+# Firecrawl API key comes from environment
+FIRECRAWL_API_KEY = os.environ.get("FIRECRAWL_API_KEY", "")
 
 FIRECRAWL_BASE_URL = "https://api.firecrawl.dev"
 
@@ -38,6 +38,8 @@ def web_search(query: str, limit: int = 5) -> Dict[str, Any]:
     """
     if not query:
         return _err("query is required", code="VALIDATION_ERROR")
+    if not FIRECRAWL_API_KEY:
+        return _err("FIRECRAWL_API_KEY env not set", code="CONFIG_ERROR")
 
     url = f"{FIRECRAWL_BASE_URL}/v1/search"
     payload = {"query": query, "limit": limit}
@@ -60,6 +62,8 @@ def web_scrape(url: str) -> Dict[str, Any]:
     """
     if not url:
         return _err("url is required", code="VALIDATION_ERROR")
+    if not FIRECRAWL_API_KEY:
+        return _err("FIRECRAWL_API_KEY env not set", code="CONFIG_ERROR")
 
     api = f"{FIRECRAWL_BASE_URL}/v1/scrape"
     payload = {"url": url, "formats": ["markdown"], "onlyMainContent": True}
@@ -83,6 +87,8 @@ def web_crawl(start_url: str, limit: int = 10) -> Dict[str, Any]:
     """
     if not start_url:
         return _err("start_url is required", code="VALIDATION_ERROR")
+    if not FIRECRAWL_API_KEY:
+        return _err("FIRECRAWL_API_KEY env not set", code="CONFIG_ERROR")
 
     api = f"{FIRECRAWL_BASE_URL}/v1/crawl"
     payload = {

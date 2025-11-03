@@ -1,4 +1,5 @@
 from typing import Any, Dict, Optional
+import os
 import httpx
 from mcp.server.fastmcp import FastMCP
 from web import FIRECRAWL_API_KEY, FIRECRAWL_BASE_URL
@@ -47,6 +48,8 @@ HARD_CODED = {
 def about_page_crawl() -> Dict[str, Any]:
     """Crawl/scrape the DosiBridge About page and return markdown content."""
     try:
+        if not FIRECRAWL_API_KEY:
+            return _err("FIRECRAWL_API_KEY env not set", code="CONFIG_ERROR")
         api = f"{FIRECRAWL_BASE_URL}/v1/scrape"
         payload = {"url": "https://dosibridge.com/about", "formats": ["markdown"], "onlyMainContent": True}
         with httpx.Client(timeout=60.0) as client:
@@ -60,6 +63,8 @@ def about_page_crawl() -> Dict[str, Any]:
 
 
 def _fetch_about_markdown() -> str:
+    if not FIRECRAWL_API_KEY:
+        raise httpx.HTTPError("FIRECRAWL_API_KEY env not set")
     api = f"{FIRECRAWL_BASE_URL}/v1/scrape"
     payload = {"url": "https://dosibridge.com/about", "formats": ["markdown"], "onlyMainContent": True}
     with httpx.Client(timeout=60.0) as client:
