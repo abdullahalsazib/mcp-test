@@ -27,7 +27,7 @@ app.mount("/web", web_mcp.streamable_http_app())
 app.mount("/weather", weather_mcp.streamable_http_app())
 app.mount("/people", people_mcp.streamable_http_app())
 
-PORT = os.environ.get("PORT", 10000)
+PORT = int(os.environ.get("PORT", "10000"))
 
 if __name__ == "__main__":
     import uvicorn
