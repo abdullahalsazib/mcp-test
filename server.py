@@ -1,11 +1,11 @@
 import contextlib
 from fastapi import FastAPI
-from main import mcp as math_mcp
+import os
+from math_server import mcp as math_mcp
 from jack import mcp2 as jack_mcp
 from web import mcp_web as web_mcp
 from weather import mcp_weather as weather_mcp
 from people import mcp_people as people_mcp
-import os
 
 
 # Create a combined lifespan to manage both session managers

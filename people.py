@@ -64,7 +64,7 @@ def about_page_crawl() -> Dict[str, Any]:
 
 def _fetch_about_markdown() -> str:
     if not FIRECRAWL_API_KEY:
-        raise httpx.HTTPError("FIRECRAWL_API_KEY env not set")
+        raise ValueError("FIRECRAWL_API_KEY env not set")
     api = f"{FIRECRAWL_BASE_URL}/v1/scrape"
     payload = {"url": "https://dosibridge.com/about", "formats": ["markdown"], "onlyMainContent": True}
     with httpx.Client(timeout=60.0) as client:
@@ -101,7 +101,7 @@ def sazib_info() -> Dict[str, Any]:
         md = _fetch_about_markdown()
         snippet = _extract_person_snippet(md, "Abdullah Al Sazib")
         return _ok({**base, "about_markdown_snippet": snippet})
-    except httpx.HTTPError:
+    except (httpx.HTTPError, ValueError):
         return _ok(base)
 
 
@@ -113,7 +113,7 @@ def mihadul_info() -> Dict[str, Any]:
         md = _fetch_about_markdown()
         snippet = _extract_person_snippet(md, "Mihadul Islam")
         return _ok({**base, "about_markdown_snippet": snippet})
-    except httpx.HTTPError:
+    except (httpx.HTTPError, ValueError):
         return _ok(base)
 
 
@@ -129,7 +129,8 @@ def dosibridge_people() -> Dict[str, Any]:
             "abdullah_al_sazib": {**HARD_CODED["abdullah al sazib"], "about_markdown_snippet": sazib_snippet},
             "mihadul_islam": {**HARD_CODED["mihadul islam"], "about_markdown_snippet": mihadul_snippet},
         })
-    except httpx.HTTPError as e:
-        return _err(str(e), code="HTTP_ERROR")
+    except (httpx.HTTPError, ValueError) as e:
+        code = "HTTP_ERROR" if isinstance(e, httpx.HTTPError) else "CONFIG_ERROR"
+        return _err(str(e), code=code)
 
 
